@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import matera from '../../assets/matera.png';
+import { getUser } from '../../service/user';
 import { ISignInForm } from '../../types/store.type';
 import { SignInSchema } from '../../validators/schemas';
 import {
@@ -20,8 +21,21 @@ export default function Login() {
     password: '',
   };
 
-  const onSubmit = (values: ISignInForm) => {
-    console.log(values);
+  const onSubmit = async (values: ISignInForm) => {
+    try {
+      const user = await getUser(values.email);
+
+      if (user) {
+        if (user.password === values.password) {
+          console.log('Usuário logado');
+        } else {
+          console.log('Senha incorreta');
+        }
+      } else {
+        console.log('Usuário não encontrado');
+      }
+    } catch (error) {
+    }
   };
 
   const formik = useFormik({
@@ -63,7 +77,7 @@ export default function Login() {
         <Button
           type="submit"
           variant="contained"
-          onClick={() => formik.handleSubmit}
+          onClick={() => formik.handleSubmit()}
           disabled={!formik.isValid || !formik.dirty}
         >
           Entrar

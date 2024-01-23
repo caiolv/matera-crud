@@ -36,18 +36,6 @@ export const Input = styled(TextField)`
 export const Button = styled(MButton)`
   width: 100%;
   height: 3.125rem;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: #000;
-  color: #fff;
-  font-size: 1.125rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-
-  &:hover {
-    filter: brightness(0.9);
-  }
 `;
 
 export const SignInText = styled(Box)`

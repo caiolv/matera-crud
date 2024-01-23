@@ -20,3 +20,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+a,
+a:hover,
+a:focus {
+  text-decoration: none;
+  outline: none;
+  color: #004696;
+}

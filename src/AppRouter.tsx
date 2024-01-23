@@ -15,6 +15,8 @@ function PrivateRoute({ children }: { children: ReactNode }) {
 }
 
 function AppRouter() {
+  const isLoggedIn = useSelector((state: IMainState) => state.user.isLoggedIn);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -27,7 +29,10 @@ function AppRouter() {
             </PrivateRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={isLoggedIn ? <Navigate to="/products" /> : <Login />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
