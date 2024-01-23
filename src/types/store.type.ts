@@ -29,7 +29,33 @@ export type UserAction = {
   isLoggedIn: boolean;
 };
 
-export type ISignInForm = {
+export interface ISignInForm {
   email: string;
   password: string;
-};
+}
+enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+  NON_BINARY = 'non_binary',
+}
+
+interface IAddress {
+  zipCode: string;
+  city: string;
+  state: string;
+  street: string;
+  number: number;
+  neighborhood: string;
+  complement: string;
+}
+
+export interface ISignUpForm {
+  name: string;
+  surname: string;
+  cpf: string;
+  email: string;
+  password: string;
+  gender: Gender;
+  birthDate: Date | string | number;
+  address: IAddress;
+}

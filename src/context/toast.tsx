@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-children-prop */
+import { IToastOptions, ToastDialog } from '@/components/Toast';
 import * as React from 'react';
-
-import { IToastOptions, ToastDialog } from '../components/Toast';
 
 export const ToastServiceContext = React.createContext<{
   openToast: (options: IToastOptions) => void;

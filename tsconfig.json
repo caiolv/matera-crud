@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+      "require": ["tsconfig-paths/register"]
+  },
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -21,12 +24,10 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@": ["./src"],
       "@/*": ["./src/*"],
-      "@components": ["./src/components"]
     }
   },
   "include": [
-    "src"
+    "./src"
   ]
 }

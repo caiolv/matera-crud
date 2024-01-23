@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import Login from './pages/Login';
 import Products from './pages/Products';
+import Register from './pages/Register';
 import { IMainState } from './types/store.type';
 
 function PrivateRoute({ children }: { children: ReactNode }) {
@@ -14,7 +15,7 @@ function PrivateRoute({ children }: { children: ReactNode }) {
   return isLoggedIn ? children : <Navigate to="/login" />;
 }
 
-function AppRouter() {
+function Router() {
   const isLoggedIn = useSelector((state: IMainState) => state.user.isLoggedIn);
 
   return (
@@ -33,10 +34,11 @@ function AppRouter() {
           path="/login"
           element={isLoggedIn ? <Navigate to="/products" /> : <Login />}
         />
+        <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default AppRouter;
+export default Router;

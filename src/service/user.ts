@@ -1,4 +1,4 @@
-import { IUser } from '@/types/store.type';
+import { ISignUpForm, IUser } from '@/types/store.type';
 import { AxiosResponse } from 'axios';
 
 import { api } from './api';
@@ -11,4 +11,10 @@ export const getUser = async (email: string) => {
   });
 
   return response.data[0];
+};
+
+export const createUser = async (user: ISignUpForm) => {
+  const response: AxiosResponse<IUser> = await api.post(path, user);
+
+  return response.data;
 };

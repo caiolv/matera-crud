@@ -1,42 +1,43 @@
 import matera from '@/assets/matera.png';
 import { useToast } from '@/context/toast';
-import { getUser } from '@/service/user';
-import { ISignInForm } from '@/types/store.type';
-import { SignInSchema } from '@/validators/schemas';
+import { createUser } from '@/service/user';
+import { ISignUpForm } from '@/types/store.type';
+import { Gender, SignUpSchema } from '@/validators/schemas';
 import { useFormik } from 'formik';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import {
-  LoginContainer,
-  Container,
-  Logo,
-  Input,
-  Button,
-  SignInText,
-} from './styles';
+import { LoginContainer, Button, Container, Input, Logo } from './styles';
 
-export default function Login() {
+const initialValues: ISignUpForm = {
+  name: '',
+  email: '',
+  password: '',
+  surname: '',
+  cpf: '',
+  gender: Gender.MALE,
+  birthDate: '',
+  address: {
+    street: '',
+    number: 0,
+    neighborhood: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    complement: '',
+  },
+};
+
+export default function Register() {
   const { openToast } = useToast();
+  const navigate = useNavigate();
 
-  const initialValues: ISignInForm = {
-    email: '',
-    password: '',
-  };
+  const redirectToLogin = () => navigate('/login');
 
-  const onSubmit = async (values: ISignInForm) => {
+  const onSubmit = async (values: ISignUpForm) => {
     try {
-      const user = await getUser(values.email);
-
-      if (user) {
-        if (user.password === values.password) {
-          console.log('Usuário logado');
-        } else {
-          console.log('Senha incorreta');
-        }
-      } else {
-        console.log('Usuário não encontrado');
-      }
+      await createUser(values);
+      redirectToLogin();
     } catch (error) {
       openToast({
         message: 'Erro ao realizar login',
@@ -48,7 +49,7 @@ export default function Login() {
   const formik = useFormik({
     initialValues,
     onSubmit,
-    validationSchema: SignInSchema,
+    validationSchema: SignUpSchema,
     enableReinitialize: true,
   });
 
@@ -89,10 +90,6 @@ export default function Login() {
         >
           Entrar
         </Button>
-
-        <SignInText>
-          Não tem uma conta? <Link to="/register">Cadastre-se</Link>
-        </SignInText>
       </LoginContainer>
     </Container>
   );

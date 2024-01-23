@@ -2,8 +2,8 @@ import { CssBaseline } from '@mui/material';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import AppRouter from './AppRouter';
 import { ToastServiceProvider } from './context/toast';
+import Router from './Router';
 import { persistor, store } from './store';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
       <PersistGate persistor={persistor}>
         <ToastServiceProvider>
           <CssBaseline />
-          <AppRouter />
+          <Router />
         </ToastServiceProvider>
       </PersistGate>
     </Provider>
