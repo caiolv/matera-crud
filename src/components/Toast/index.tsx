@@ -24,6 +24,7 @@ export function ToastDialog({
       autoHideDuration={6000}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       onClose={onClose}
+      onClick={onClose}
     >
       <Alert severity={variant} variant="filled" sx={{ width: '100%' }}>
         {message}
