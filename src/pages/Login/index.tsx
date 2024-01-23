@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import matera from '../../assets/matera.png';
+import { useToast } from '../../context/toast';
 import { getUser } from '../../service/user';
 import { ISignInForm } from '../../types/store.type';
 import { SignInSchema } from '../../validators/schemas';
@@ -16,6 +17,8 @@ import {
 } from './styles';
 
 export default function Login() {
+  const openToast = useToast();
+
   const initialValues: ISignInForm = {
     email: '',
     password: '',
@@ -35,6 +38,10 @@ export default function Login() {
         console.log('Usuário não encontrado');
       }
     } catch (error) {
+      openToast({
+        message: 'Erro ao realizar login',
+        variant: 'error',
+      });
     }
   };
 
