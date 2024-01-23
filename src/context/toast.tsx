@@ -4,9 +4,13 @@ import * as React from 'react';
 
 import { IToastOptions, ToastDialog } from '../components/Toast';
 
-export const ToastServiceContext = React.createContext<
-  (options: IToastOptions) => void
->(() => undefined);
+export const ToastServiceContext = React.createContext<{
+  openToast: (options: IToastOptions) => void;
+  closeToast: () => void;
+}>({
+  openToast: () => undefined,
+  closeToast: () => undefined,
+});
 
 export const useToast = () => React.useContext(ToastServiceContext);
 
@@ -21,15 +25,28 @@ export function ToastServiceProvider({
 
   const openToast = React.useCallback((options: IToastOptions) => {
     setToastState(options);
-    setTimeout(() => {
-      setToastState(null);
-    }, 6000);
   }, []);
+
+  const closeToast = React.useCallback(() => {
+    setToastState(null);
+  }, []);
+
+  const contextValue = React.useMemo(
+    () => ({
+      openToast,
+      closeToast,
+    }),
+    [openToast, closeToast],
+  );
 
   return (
     <>
-      <ToastServiceContext.Provider value={openToast} children={children} />
-      <ToastDialog open={Boolean(ToastState)} {...ToastState!} />
+      <ToastServiceContext.Provider value={contextValue} children={children} />
+      <ToastDialog
+        open={Boolean(ToastState)}
+        onClose={closeToast}
+        {...ToastState!}
+      />
     </>
   );
 }

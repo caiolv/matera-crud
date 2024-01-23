@@ -17,7 +17,7 @@ import {
 } from './styles';
 
 export default function Login() {
-  const openToast = useToast();
+  const { openToast } = useToast();
 
   const initialValues: ISignInForm = {
     email: '',

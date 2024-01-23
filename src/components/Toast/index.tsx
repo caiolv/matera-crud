@@ -8,14 +8,22 @@ export interface IToastOptions {
 
 interface IToast extends IToastOptions {
   open: boolean;
+  onClose: () => void;
 }
 
-export function ToastDialog({ open, message, variant = 'info' }: IToast) {
+export function ToastDialog({
+  open,
+  message,
+  variant = 'info',
+  onClose,
+}: IToast) {
   return (
     <Snackbar
       open={open}
       message={message}
+      autoHideDuration={6000}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      onClose={onClose}
     >
       <Alert severity={variant} variant="filled" sx={{ width: '100%' }}>
         {message}
