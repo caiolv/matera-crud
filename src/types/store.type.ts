@@ -28,3 +28,8 @@ export type UserAction = {
   user: IUser | null;
   isLoggedIn: boolean;
 };
+
+export type ISignInForm = {
+  email: string;
+  password: string;
+};
