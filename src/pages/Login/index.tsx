@@ -1,10 +1,12 @@
 import matera from '@/assets/matera.png';
 import { useToast } from '@/context/toast';
 import { getUser } from '@/service/user';
+import { setLogged } from '@/store/actions/user';
 import { ISignInForm } from '@/types/store.type';
 import { SignInSchema } from '@/validators/schemas';
 import { useFormik } from 'formik';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import {
@@ -17,6 +19,7 @@ import {
 } from './styles';
 
 export default function Login() {
+  const dispatch = useDispatch();
   const { openToast } = useToast();
 
   const initialValues: ISignInForm = {
@@ -30,12 +33,23 @@ export default function Login() {
 
       if (user) {
         if (user.password === values.password) {
-          console.log('Usuário logado');
+          dispatch(
+            setLogged({
+              user,
+              isLoggedIn: true,
+            }),
+          );
         } else {
-          console.log('Senha incorreta');
+          openToast({
+            message: 'Usuário/senha incorreto(s)',
+            variant: 'error',
+          });
         }
       } else {
-        console.log('Usuário não encontrado');
+        openToast({
+          message: 'Usuário/senha incorreto(s)',
+          variant: 'error',
+        });
       }
     } catch (error) {
       openToast({
