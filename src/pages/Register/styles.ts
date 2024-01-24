@@ -1,25 +1,29 @@
-import { styled, Box, TextField, Button as MButton } from '@mui/material';
+import { styled, Box, TextField, Button as MButton, Grid } from '@mui/material';
+import { DatePicker as MDatePicker } from '@mui/x-date-pickers';
 
 export const Container = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
-export const LoginContainer = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  max-width: 28rem;
+export const SignUpContainer = styled(Box)`
+  max-width: 64rem;
   width: 100%;
   background-color: #fff;
   padding: 2rem;
   border-radius: 0.5rem;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
-  gap: 1rem;
+`;
+
+export const FormContainer = styled(Grid)``;
+
+export const Item = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const Logo = styled('img')`
@@ -44,4 +48,8 @@ export const SignInText = styled(Box)`
   color: #6b7280;
   font-weight: 700;
   margin-top: 1rem;
+`;
+
+export const DatePicker = styled(MDatePicker)`
+  width: 100%;
 `;

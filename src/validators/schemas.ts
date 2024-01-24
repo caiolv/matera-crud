@@ -19,14 +19,16 @@ const AddressSchema = yup.object().shape({
   number: yup.string().required('Campo obrigatório'),
   city: yup.string().required('Campo obrigatório'),
   state: yup.string().required('Campo obrigatório'),
-  zipcode: yup.string().required('Campo obrigatório'),
+  zipCode: yup.string().required('Campo obrigatório'),
   complement: yup.string(),
+  neighborhood: yup.string().required('Campo obrigatório'),
 });
 
 export const SignUpSchema = yup.object().shape({
   name: yup.string().required('Campo obrigatório'),
   surname: yup.string().required('Campo obrigatório'),
   email: yup.string().email('E-mail inválido').required('Campo obrigatório'),
+  cpf: yup.string().required('Campo obrigatório'),
   password: yup.string().required(),
   gender: yup.mixed().oneOf(Object.values(Gender)).required(),
   address: AddressSchema,

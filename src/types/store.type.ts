@@ -44,7 +44,7 @@ interface IAddress {
   city: string;
   state: string;
   street: string;
-  number: number;
+  number: string;
   neighborhood: string;
   complement: string;
 }
