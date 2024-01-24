@@ -25,22 +25,19 @@ import {
 } from './styles';
 
 const initialValues: ISignUpForm = {
-  name: '',
+  nome: '',
   email: '',
-  password: '',
-  surname: '',
+  senha: '',
+  sobrenome: '',
   cpf: '',
-  gender: Gender.MALE,
-  birthDate: '',
-  address: {
-    street: '',
-    number: '',
-    neighborhood: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    complement: '',
-  },
+  sexo: Gender.MALE,
+  dt_nascimento: '',
+  cep: '',
+  logradouro: '',
+  complemento: '',
+  bairro: '',
+  cidade: '',
+  estado: '',
 };
 
 export default function Register() {
@@ -67,9 +64,12 @@ export default function Register() {
     try {
       await createUser(values);
       redirectToLogin();
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+
       openToast({
-        message: 'Erro ao realizar login',
+        message: `Erro ao registrar usuário: ${error.response.data}`,
         variant: 'error',
       });
     }
@@ -95,15 +95,12 @@ export default function Register() {
         const address = await getAddress(formattedCep);
         formik.setValues({
           ...formik.values,
-          address: {
-            neighborhood: address.bairro,
-            city: address.localidade,
-            state: address.uf,
-            street: address.logradouro,
-            complement: address.complemento,
-            zipCode: address.cep,
-            number: '',
-          },
+          bairro: address.bairro,
+          cidade: address.localidade,
+          estado: address.uf,
+          logradouro: address.logradouro,
+          complemento: address.complemento,
+          cep: address.cep,
         });
       } catch (error) {
         openToast({
@@ -118,7 +115,7 @@ export default function Register() {
   const handleDate = (date: any) => {
     formik.setValues({
       ...formik.values,
-      birthDate: new Date(date.$d || null),
+      dt_nascimento: new Date(date.$d || null),
     });
   };
 
@@ -131,24 +128,26 @@ export default function Register() {
         <FormContainer container spacing={2}>
           <Item item xs={12} sm={6}>
             <Input
-              id="name"
-              name="name"
+              id="nome"
+              name="nome"
               label="Nome"
-              value={formik.values.name}
+              value={formik.values.nome}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
+              error={formik.touched.nome && Boolean(formik.errors.nome)}
             />
           </Item>
 
           <Item item xs={12} sm={6}>
             <Input
-              id="surname"
-              name="surname"
+              id="sobrenome"
+              name="sobrenome"
               label="Sobrenome"
-              value={formik.values.surname}
+              value={formik.values.sobrenome}
               onChange={formik.handleChange}
-              error={formik.touched.surname && Boolean(formik.errors.surname)}
+              error={
+                formik.touched.sobrenome && Boolean(formik.errors.sobrenome)
+              }
               onBlur={formik.handleBlur}
             />
           </Item>
@@ -167,13 +166,13 @@ export default function Register() {
 
           <Item item xs={12} sm={6}>
             <Input
-              id="password"
-              name="password"
+              id="senha"
+              name="senha"
               label="Senha"
               type="password"
-              value={formik.values.password}
+              value={formik.values.senha}
               onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
+              error={formik.touched.senha && Boolean(formik.errors.senha)}
               onBlur={formik.handleBlur}
             />
           </Item>
@@ -200,15 +199,15 @@ export default function Register() {
 
           <Item item xs={12} sm={4}>
             <FormControl fullWidth>
-              <InputLabel id="gender">Gênero</InputLabel>
+              <InputLabel id="sexo">Gênero</InputLabel>
               <Select
-                labelId="gender"
-                id="gender-select"
-                value={formik.values.gender}
+                labelId="sexo"
+                id="sexo-select"
+                value={formik.values.sexo}
                 label="Gênero"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                name="gender"
+                name="sexo"
               >
                 <MenuItem value={Gender.MALE}>Masculino</MenuItem>
                 <MenuItem value={Gender.FEMALE}>Feminino</MenuItem>
@@ -229,17 +228,14 @@ export default function Register() {
 
           <Item item xs={12} sm={4}>
             <Input
-              id="address.zipCode"
-              name="address.zipCode"
+              id="cep"
+              name="cep"
               label="CEP"
-              value={formik.values.address.zipCode}
+              value={formik.values.cep}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 validateAddress(formik.handleChange, e)
               }
-              error={
-                formik.touched.address?.zipCode &&
-                Boolean(formik.errors.address?.zipCode)
-              }
+              error={formik.touched.cep && Boolean(formik.errors.cep)}
               onBlur={formik.handleBlur}
               InputProps={{
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -253,14 +249,13 @@ export default function Register() {
 
           <Item item xs={12} sm={6}>
             <Input
-              id="address.street"
-              name="address.street"
+              id="logradouro"
+              name="logradouro"
               label="Rua"
-              value={formik.values.address.street}
+              value={formik.values.logradouro}
               onChange={formik.handleChange}
               error={
-                formik.touched.address?.street &&
-                Boolean(formik.errors.address?.street)
+                formik.touched.logradouro && Boolean(formik.errors.logradouro)
               }
               onBlur={formik.handleBlur}
             />
@@ -268,75 +263,50 @@ export default function Register() {
 
           <Item item xs={12} sm={2}>
             <Input
-              id="address.number"
-              name="address.number"
-              label="Número"
-              value={formik.values.address.number}
+              id="complemento"
+              name="complemento"
+              label="Complemento"
+              value={formik.values.complemento}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={
-                formik.touched.address?.number &&
-                Boolean(formik.errors.address?.number)
+                formik.touched.complemento && Boolean(formik.errors.complemento)
               }
             />
           </Item>
 
           <Item item xs={12} sm={4}>
             <Input
-              id="address.neighborhood"
-              name="address.neighborhood"
+              id="bairro"
+              name="bairro"
               label="Bairro"
-              value={formik.values.address.neighborhood}
+              value={formik.values.bairro}
               onChange={formik.handleChange}
-              error={
-                formik.touched.address?.neighborhood &&
-                Boolean(formik.errors.address?.neighborhood)
-              }
+              error={formik.touched.bairro && Boolean(formik.errors.bairro)}
               onBlur={formik.handleBlur}
             />
           </Item>
 
           <Item item xs={12} sm={4}>
             <Input
-              id="address.city"
-              name="address.city"
+              id="cidade"
+              name="cidade"
               label="Cidade"
-              value={formik.values.address.city}
+              value={formik.values.cidade}
               onChange={formik.handleChange}
-              error={
-                formik.touched.address?.city &&
-                Boolean(formik.errors.address?.city)
-              }
+              error={formik.touched.cidade && Boolean(formik.errors.cidade)}
               onBlur={formik.handleBlur}
             />
           </Item>
 
           <Item item xs={12} sm={4}>
             <Input
-              id="address.state"
-              name="address.state"
+              id="estado"
+              name="estado"
               label="Estado"
-              value={formik.values.address.state}
+              value={formik.values.estado}
               onChange={formik.handleChange}
-              error={
-                formik.touched.address?.state &&
-                Boolean(formik.errors.address?.state)
-              }
-              onBlur={formik.handleBlur}
-            />
-          </Item>
-
-          <Item item xs={12} sm={12}>
-            <Input
-              id="address.complement"
-              name="address.complement"
-              label="Complemento (opcional)"
-              value={formik.values.address.complement}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.address?.complement &&
-                Boolean(formik.errors.address?.complement)
-              }
+              error={formik.touched.estado && Boolean(formik.errors.estado)}
               onBlur={formik.handleBlur}
             />
           </Item>

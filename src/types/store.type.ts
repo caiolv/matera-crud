@@ -9,19 +9,21 @@ export interface IUserState {
 
 export interface IUser {
   id: number;
-  name: string;
-  email: string;
-  password: string;
-  cpf: string;
+  bairro: string;
   cep: string;
-  address: string;
-  number: string;
-  complement: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  birthDate: string;
-  phone: string;
+  cidade: string;
+  complemento: string | number;
+  cpf: string | number;
+  dt_nascimento: string | number | Date;
+  email: string;
+  estado: string;
+  image: string;
+  logradouro: string;
+  nome: string;
+  senha: string;
+  sexo: string;
+  sobrenome: string;
+  token: string;
 }
 
 export type UserAction = {
@@ -39,23 +41,18 @@ enum Gender {
   NON_BINARY = 'non_binary',
 }
 
-interface IAddress {
-  zipCode: string;
-  city: string;
-  state: string;
-  street: string;
-  number: string;
-  neighborhood: string;
-  complement: string;
-}
-
 export interface ISignUpForm {
-  name: string;
-  surname: string;
+  nome: string;
+  sobrenome: string;
   cpf: string;
   email: string;
-  password: string;
-  gender: Gender;
-  birthDate: Date | string | number;
-  address: IAddress;
+  senha: string;
+  sexo: Gender;
+  dt_nascimento: Date | string | number;
+  cep: string;
+  cidade: string;
+  estado: string;
+  logradouro: string;
+  bairro: string;
+  complemento: string;
 }

@@ -14,22 +14,17 @@ export const SignInSchema = yup.object().shape({
     .required('Campo obrigatório'),
 });
 
-const AddressSchema = yup.object().shape({
-  street: yup.string().required('Campo obrigatório'),
-  number: yup.string().required('Campo obrigatório'),
-  city: yup.string().required('Campo obrigatório'),
-  state: yup.string().required('Campo obrigatório'),
-  zipCode: yup.string().required('Campo obrigatório'),
-  complement: yup.string(),
-  neighborhood: yup.string().required('Campo obrigatório'),
-});
-
 export const SignUpSchema = yup.object().shape({
-  name: yup.string().required('Campo obrigatório'),
-  surname: yup.string().required('Campo obrigatório'),
+  nome: yup.string().required('Campo obrigatório'),
+  sobrenome: yup.string().required('Campo obrigatório'),
   email: yup.string().email('E-mail inválido').required('Campo obrigatório'),
   cpf: yup.string().required('Campo obrigatório'),
-  password: yup.string().required(),
-  gender: yup.mixed().oneOf(Object.values(Gender)).required(),
-  address: AddressSchema,
+  senha: yup.string().min(8, 'A senha precisa ter 8 caracteres').required(),
+  sexo: yup.mixed().oneOf(Object.values(Gender)).required(),
+  logradouro: yup.string().required('Campo obrigatório'),
+  complemento: yup.string().required('Campo obrigatório'),
+  cidade: yup.string().required('Campo obrigatório'),
+  estado: yup.string().required('Campo obrigatório'),
+  cep: yup.string().required('Campo obrigatório'),
+  bairro: yup.string().required('Campo obrigatório'),
 });

@@ -32,7 +32,7 @@ export default function Login() {
       const user = await getUser(values.email);
 
       if (user) {
-        if (user.password === values.password) {
+        if (user.senha === values.password) {
           dispatch(
             setLogged({
               user,
