@@ -1,13 +1,16 @@
 import matera from '@/assets/matera.png';
+import TextMaskCustom from '@/components/MaskedInput';
 import { useToast } from '@/context/toast';
+import { getAddress } from '@/service/cep';
 import { createUser } from '@/service/user';
 import { ISignUpForm } from '@/types/store.type';
+import { isCpfValid } from '@/validators/cpf';
 import { Gender, SignUpSchema } from '@/validators/schemas';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useFormik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -44,9 +47,23 @@ export default function Register() {
   const { openToast } = useToast();
   const navigate = useNavigate();
 
+  const [cpfError, setCpfError] = useState<boolean>(false);
+
   const redirectToLogin = () => navigate('/login');
 
   const onSubmit = async (values: ISignUpForm) => {
+    const invalidCpf = !isCpfValid(values.cpf);
+
+    if (invalidCpf) {
+      setCpfError(true);
+      openToast({
+        message: 'CPF inválido',
+        variant: 'error',
+      });
+      return;
+    }
+    setCpfError(false);
+
     try {
       await createUser(values);
       redirectToLogin();
@@ -64,6 +81,38 @@ export default function Register() {
     validationSchema: SignUpSchema,
     enableReinitialize: true,
   });
+
+  const validateAddress = async (
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    handleChange(event);
+    const cep = event.target.value;
+    const formattedCep = cep.replace(/\D/g, '');
+
+    if (formattedCep.length === 8) {
+      try {
+        const address = await getAddress(formattedCep);
+        formik.setValues({
+          ...formik.values,
+          address: {
+            neighborhood: address.bairro,
+            city: address.localidade,
+            state: address.uf,
+            street: address.logradouro,
+            complement: address.complemento,
+            zipCode: address.cep,
+            number: '',
+          },
+        });
+      } catch (error) {
+        openToast({
+          message: 'Erro ao buscar endereço',
+          variant: 'error',
+        });
+      }
+    }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDate = (date: any) => {
@@ -128,16 +177,24 @@ export default function Register() {
               onBlur={formik.handleBlur}
             />
           </Item>
-
           <Item item xs={12} sm={4}>
             <Input
               id="cpf"
-              name="cpf"
               label="CPF"
+              variant="outlined"
+              type="text"
               value={formik.values.cpf}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.cpf && Boolean(formik.errors.cpf)}
+              name="cpf"
+              error={Boolean(formik.errors.cpf) || cpfError}
+              InputProps={{
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                inputComponent: TextMaskCustom as any,
+                inputProps: {
+                  mask: '000.000.000-00',
+                },
+              }}
             />
           </Item>
 
@@ -176,12 +233,21 @@ export default function Register() {
               name="address.zipCode"
               label="CEP"
               value={formik.values.address.zipCode}
-              onChange={formik.handleChange}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                validateAddress(formik.handleChange, e)
+              }
               error={
                 formik.touched.address?.zipCode &&
                 Boolean(formik.errors.address?.zipCode)
               }
               onBlur={formik.handleBlur}
+              InputProps={{
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                inputComponent: TextMaskCustom as any,
+                inputProps: {
+                  mask: '00000-000',
+                },
+              }}
             />
           </Item>
 
@@ -264,7 +330,7 @@ export default function Register() {
             <Input
               id="address.complement"
               name="address.complement"
-              label="Complemento"
+              label="Complemento (opcional)"
               value={formik.values.address.complement}
               onChange={formik.handleChange}
               error={
