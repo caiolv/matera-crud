@@ -1,3 +1,7 @@
+:root {
+  --primary: #004696;
+}
+
 *, 
 *:after,
 *:before {
@@ -26,5 +30,5 @@ a:hover,
 a:focus {
   text-decoration: none;
   outline: none;
-  color: #004696;
+  color: var(--primary);
 }
