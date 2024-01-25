@@ -79,10 +79,31 @@ export interface IProductForm {
   qt_vendas: number;
 }
 
+export type ProductAction = {
+  product: IProduct;
+};
+
 export type ProductsAction = {
   products: IProduct[];
 };
 
 export type ProductState = {
   list: IProduct[];
+  currentPage: number;
+  lastSeen: IProduct[];
+  filter: string;
+};
+
+export interface IProductData {
+  avatar: string;
+  createdAt: string;
+  marca: string;
+  nome: string;
+  preco: string;
+  qt_estoque: number;
+  qt_vendas: number;
+}
+
+export type PageAction = {
+  page: number;
 };

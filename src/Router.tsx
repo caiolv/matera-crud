@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import NotFound from './pages/404';
 import Login from './pages/Login';
+import Product from './pages/Product';
 import Products from './pages/Products';
 import Register from './pages/Register';
 import { IMainState } from './types/store.type';
@@ -30,6 +31,14 @@ function Router() {
           element={
             <PrivateRoute>
               <Products />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/products/:id"
+          element={
+            <PrivateRoute>
+              <Product />
             </PrivateRoute>
           }
         />

@@ -1,4 +1,11 @@
-import { Box, Grid, TableRow, Typography, styled } from '@mui/material';
+import {
+  Box,
+  Grid,
+  Pagination as MPagination,
+  TableRow,
+  Typography,
+  styled,
+} from '@mui/material';
 
 export const ProductItem = styled(TableRow)`
   background: transparent;
@@ -29,4 +36,19 @@ export const PageActions = styled(Box)`
   display: flex;
   align-items: center;
   gap: 2rem;
+`;
+
+export const ProductImage = styled('img')`
+  width: 3.125rem;
+  height: 3.125rem;
+  object-fit: cover;
+  border-radius: 0.75rem;
+`;
+
+export const Pagination = styled(MPagination)`
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
 `;

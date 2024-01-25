@@ -1,7 +1,9 @@
 import PageLayout from '@/components/PageLayout';
+import ProductModal from '@/components/ProductModal';
 import { getProducts } from '@/service/products';
 import { setProducts } from '@/store/actions/products';
 import { IMainState } from '@/types/store.type';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
   Button,
   Input,
@@ -11,15 +13,17 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   Item,
   PageActions,
   PageHeader,
   PageTitle,
+  Pagination,
+  ProductImage,
   ProductItem,
 } from './styles';
 
@@ -28,6 +32,16 @@ export default function Products() {
   const navigate = useNavigate();
   const { info } = useSelector((state: IMainState) => state.user);
   const { list } = useSelector((state: IMainState) => state.product);
+  const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const handlePaginationChange = (
+    _: React.ChangeEvent<unknown>,
+    value: number,
+  ) => {
+    setCurrentPage(value);
+  };
 
   const loadProducts = async () => {
     if (list.length === 0 && info?.token) {
@@ -39,6 +53,38 @@ export default function Products() {
       );
     }
   };
+
+  const filteredProducts = useMemo(() => {
+    if (filter) {
+      return list.filter(
+        (produto) =>
+          produto.nome.toLowerCase().includes(filter.toLowerCase()) ||
+          produto.marca.toLowerCase().includes(filter.toLowerCase()) ||
+          produto.preco?.toString().includes(filter.toLowerCase()),
+      );
+    }
+    return list;
+  }, [filter, list]);
+
+  const elementsByPage = useMemo(() => {
+    const start = currentPage * 15;
+    const end = start + 15;
+
+    if (filter) {
+      return filteredProducts;
+    }
+
+    return list.slice(start, end);
+  }, [currentPage, filter, filteredProducts, list]);
+
+  const totalPages = useMemo(() => {
+    if (filter) {
+      const filterLen = filteredProducts.length / 15;
+
+      return Math.floor(filterLen > 1 ? filterLen : 1);
+    }
+    return Math.floor(list.length / 15);
+  }, [filter, filteredProducts, list]);
 
   useEffect(() => {
     loadProducts();
@@ -60,8 +106,17 @@ export default function Products() {
               },
             }}
           >
-            <Input placeholder="Pesquisar" />
-            <Button variant="contained">Novo produto</Button>
+            <Input
+              placeholder="Pesquisar"
+              onChange={(e) => setFilter(e.target.value)}
+              value={filter}
+            />
+            <Button
+              variant="contained"
+              onClick={() => setCreateModalOpen(true)}
+            >
+              Novo produto
+            </Button>
           </PageActions>
         </Item>
       </PageHeader>
@@ -76,16 +131,24 @@ export default function Products() {
             <TableCell>Vendidos</TableCell>
             <TableCell>Estoque</TableCell>
             <TableCell>Data de Criação</TableCell>
+            <TableCell>Ações</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {list.length > 0 &&
-            list.map((product) => (
+            elementsByPage.map((product) => (
               <ProductItem
                 key={Math.random()}
-                onClick={() => navigate(`/produtos/${product.id}`)}
+                onClick={() => navigate(`/products/${product.id}`)}
               >
-                <TableCell>imagem</TableCell>
+                <TableCell>
+                  <ProductImage
+                    src={product.avatar}
+                    alt={product.nome}
+                    width="100"
+                    height="100"
+                  />
+                </TableCell>
                 <TableCell>{product.nome}</TableCell>
                 <TableCell>{product.marca}</TableCell>
                 <TableCell>
@@ -99,10 +162,25 @@ export default function Products() {
                 <TableCell>
                   {new Date(product.createdAt).toLocaleDateString()}
                 </TableCell>
+                <TableCell>
+                  <Link to={`/products/${product.id}`}>
+                    <VisibilityIcon />
+                  </Link>
+                </TableCell>
               </ProductItem>
             ))}
         </TableBody>
       </Table>
+      <Pagination
+        count={totalPages}
+        page={currentPage}
+        onChange={handlePaginationChange}
+      />
+      <ProductModal
+        handleClose={() => setCreateModalOpen(false)}
+        open={createModalOpen}
+        product={null}
+      />
     </PageLayout>
   );
 }

@@ -28,3 +28,13 @@ export const SignUpSchema = yup.object().shape({
   cep: yup.string().required('Campo obrigatório'),
   bairro: yup.string().required('Campo obrigatório'),
 });
+
+export const ProductSchema = yup.object().shape({
+  nome: yup.string().required('Campo obrigatório'),
+  avatar: yup.string().required('Campo obrigatório'),
+  marca: yup.string().required('Campo obrigatório'),
+  preco: yup.string().required('Campo obrigatório'),
+  qt_estoque: yup.number().required('Campo obrigatório'),
+  qt_vendas: yup.number().required('Campo obrigatório'),
+  createdAt: yup.string().required('Campo obrigatório'),
+});

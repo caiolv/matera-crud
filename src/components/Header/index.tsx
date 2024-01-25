@@ -6,6 +6,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton, Menu, MenuItem, Toolbar } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import {
   AppBar,
@@ -23,6 +24,7 @@ interface IProps {
 
 export default function Header(props: IProps) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { info } = useSelector((state: IMainState) => state.user);
   const { drawerWidth, handleDrawerToggle } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -42,6 +44,7 @@ export default function Header(props: IProps) {
       }),
     );
     api.defaults.headers.Authorization = '';
+    navigate('/login');
   };
 
   return (

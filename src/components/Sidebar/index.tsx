@@ -9,6 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   mobileOpen: boolean;
@@ -25,13 +26,19 @@ export default function Sidebar(props: IProps) {
     drawerWidth,
   } = props;
 
+  const navigate = useNavigate();
+
+  const goToProducts = () => {
+    navigate('/products');
+  };
+
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
         {['Produtos'].map((text) => (
-          <ListItem key={text} disablePadding>
+          <ListItem key={text} disablePadding onClick={goToProducts}>
             <ListItemButton>
               <ListItemIcon>
                 <Inventory2 />
