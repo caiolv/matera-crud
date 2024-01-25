@@ -12,7 +12,7 @@ import { IMainState } from './types/store.type';
 function PrivateRoute({ children }: { children: ReactNode }) {
   const isLoggedIn = useSelector((state: IMainState) => state.user.isLoggedIn);
 
-  return isLoggedIn ? children : <Navigate to="/login" />;
+  return isLoggedIn ? children : <Navigate to="/404" />;
 }
 
 function Router() {
@@ -21,7 +21,10 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/products" />} />
+        <Route
+          path="/"
+          element={isLoggedIn ? <Navigate to="/products" /> : <Login />}
+        />
         <Route
           path="/products"
           element={
@@ -35,6 +38,7 @@ function Router() {
           element={isLoggedIn ? <Navigate to="/products" /> : <Login />}
         />
         <Route path="/register" element={<Register />} />
+        <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
