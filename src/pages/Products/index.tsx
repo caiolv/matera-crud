@@ -47,12 +47,19 @@ export default function Products() {
   return (
     <PageLayout>
       <PageHeader container spacing={2}>
-        <Item item xs={12} sm={6}>
+        <Item item sm={12} md={6}>
           <PageTitle variant="h2">Produtos</PageTitle>
         </Item>
 
-        <Item item xs={12} sm={6}>
-          <PageActions>
+        <Item item sm={12} md={6}>
+          <PageActions
+            sx={{
+              justifyContent: {
+                sm: 'flex-start',
+                md: 'flex-end', // flex-end alignment for sm screens and larger
+              },
+            }}
+          >
             <Input placeholder="Pesquisar" />
             <Button variant="contained">Novo produto</Button>
           </PageActions>
