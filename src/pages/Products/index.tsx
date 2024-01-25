@@ -59,38 +59,18 @@ export default function Products() {
                 key={Math.random()}
                 onClick={() => navigate(`/produtos/${product.id}`)}
               >
+                <TableCell>imagem</TableCell>
+                <TableCell>{product.nome}</TableCell>
+                <TableCell>{product.marca}</TableCell>
                 <TableCell>
-                  {/* <ProductImage src={product.avatar} alt="product" /> */}
-                  imagem
-                </TableCell>
-                <TableCell>
-                  {/* <ProductText>{product.nome}</ProductText> */}
-                  {product.nome}
-                </TableCell>
-                <TableCell>
-                  {/* <ProductText>{product.marca}</ProductText> */}
-                  {product.marca}
-                </TableCell>
-                <TableCell>
-                  {/* <ProductPrice>R$ {product.preco}</ProductPrice> */}
                   {product.preco?.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL',
                   }) || '-'}
                 </TableCell>
+                <TableCell>{product.qt_vendas}</TableCell>
+                <TableCell> {product.qt_estoque}</TableCell>
                 <TableCell>
-                  {/* <ProductText>{product.qt_vendas}</ProductText> */}
-                  {product.qt_vendas}
-                </TableCell>
-                <TableCell>
-                  {' '}
-                  {/* <ProductText>{product.qt_estoque}</ProductText> */}
-                  {product.qt_estoque}
-                </TableCell>
-                <TableCell>
-                  {/* <ProductText>
-                    {new Date(product.createdAt).toLocaleDateString()}
-                  </ProductText> */}
                   {new Date(product.createdAt).toLocaleDateString()}
                 </TableCell>
               </ProductItem>

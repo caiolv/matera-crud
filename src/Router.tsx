@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import NotFound from './components/NotFound';
+import NotFound from './pages/404';
 import Login from './pages/Login';
 import Products from './pages/Products';
 import Register from './pages/Register';
