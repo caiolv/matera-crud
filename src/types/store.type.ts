@@ -1,5 +1,6 @@
 export interface IMainState {
   user: IUserState;
+  product: ProductState;
 }
 
 export interface IUserState {
@@ -56,3 +57,32 @@ export interface ISignUpForm {
   bairro: string;
   complemento: string;
 }
+
+export interface IProduct {
+  id: number;
+  avatar: string;
+  createdAt: string;
+  marca: string;
+  nome: string;
+  preco: number;
+  qt_estoque: number;
+  qt_vendas: number;
+}
+
+export interface IProductForm {
+  avatar: string;
+  createdAt: string;
+  marca: string;
+  nome: string;
+  preco: string;
+  qt_estoque: number;
+  qt_vendas: number;
+}
+
+export type ProductsAction = {
+  products: IProduct[];
+};
+
+export type ProductState = {
+  list: IProduct[];
+};

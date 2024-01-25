@@ -9,9 +9,16 @@ import {
   persistReducer,
   persistStore,
 } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import storageSession from 'redux-persist/lib/storage/session';
 
+import productReducer from './reducers/produts';
 import userReducer from './reducers/user';
+
+const productsPersistConfig = {
+  key: 'products',
+  storage,
+};
 
 const sessionPersistConfig = {
   key: 'user',
@@ -20,6 +27,7 @@ const sessionPersistConfig = {
 
 const reducer = {
   user: persistReducer(sessionPersistConfig, userReducer),
+  product: persistReducer(productsPersistConfig, productReducer),
 };
 
 export const store = configureStore({

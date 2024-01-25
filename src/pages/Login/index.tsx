@@ -40,7 +40,7 @@ export default function Login() {
               isLoggedIn: true,
             }),
           );
-          api.defaults.headers.Authorization = `Authorization ${user.token}`;
+          api.defaults.headers.common.Authorization = `Authorization ${user.token}`;
         } else {
           openToast({
             message: 'Usuário/senha incorreto(s)',

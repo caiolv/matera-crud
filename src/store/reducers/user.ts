@@ -9,7 +9,7 @@ const initialState: IUserState = {
   isLoggedIn: false,
 };
 
-const reducer = createReducer(initialState, (builder) => {
+const userReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setLogged, (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
@@ -21,4 +21,4 @@ const reducer = createReducer(initialState, (builder) => {
     });
 });
 
-export default reducer;
+export default userReducer;
