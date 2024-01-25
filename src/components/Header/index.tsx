@@ -1,4 +1,5 @@
 import matera from '@/assets/matera-white.png';
+import { api } from '@/service/api';
 import { setLoggedOut } from '@/store/actions/user';
 import { IMainState } from '@/types/store.type';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -40,6 +41,7 @@ export default function Header(props: IProps) {
         isLoggedIn: false,
       }),
     );
+    api.defaults.headers.Authorization = '';
   };
 
   return (
