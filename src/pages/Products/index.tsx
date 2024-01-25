@@ -3,6 +3,8 @@ import { getProducts } from '@/service/products';
 import { setProducts } from '@/store/actions/products';
 import { IMainState } from '@/types/store.type';
 import {
+  Button,
+  Input,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +15,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { ProductItem } from './styles';
+import {
+  Item,
+  PageActions,
+  PageHeader,
+  PageTitle,
+  ProductItem,
+} from './styles';
 
 export default function Products() {
   const dispatch = useDispatch();
@@ -38,7 +46,18 @@ export default function Products() {
 
   return (
     <PageLayout>
-      <div>Products</div>
+      <PageHeader container spacing={2}>
+        <Item item xs={12} sm={6}>
+          <PageTitle variant="h2">Produtos</PageTitle>
+        </Item>
+
+        <Item item xs={12} sm={6}>
+          <PageActions>
+            <Input placeholder="Pesquisar" />
+            <Button variant="contained">Novo produto</Button>
+          </PageActions>
+        </Item>
+      </PageHeader>
 
       <Table>
         <TableHead>
