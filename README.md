@@ -4,7 +4,7 @@
     <img src="./.github/screenshot.png" width="100%" />
 </p>
 
-A simple products CRUD.
+A simple products CRUD. ([See live](https://matera-crud.vercel.app))
 
 ## 🚀 How to run
 
