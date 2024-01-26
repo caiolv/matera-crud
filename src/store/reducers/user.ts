@@ -15,9 +15,9 @@ const userReducer = createReducer(initialState, (builder) => {
       state.isLoggedIn = action.payload.isLoggedIn;
       state.info = action.payload.user;
     })
-    .addCase(setLoggedOut, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-      state.info = action.payload.user;
+    .addCase(setLoggedOut, (state) => {
+      state.isLoggedIn = false;
+      state.info = null;
     });
 });
 

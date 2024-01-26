@@ -37,12 +37,7 @@ export default function Header(props: IProps) {
   };
 
   const handleLogout = () => {
-    dispatch(
-      setLoggedOut({
-        user: null,
-        isLoggedIn: false,
-      }),
-    );
+    dispatch(setLoggedOut());
     api.defaults.headers.Authorization = '';
     navigate('/login');
   };
