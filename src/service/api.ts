@@ -23,10 +23,9 @@ export const cepApi = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = api.defaults.headers.common.Authorization;
-  // eslint-disable-next-line no-debugger
-  debugger;
+  const loginUrl = `/user`;
 
-  if (!token) {
+  if (!token && config.url !== loginUrl) {
     // eslint-disable-next-line prefer-promise-reject-errors
     return Promise.reject({ response: { status: 401 } });
   }
