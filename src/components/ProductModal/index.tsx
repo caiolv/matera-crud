@@ -1,11 +1,11 @@
 import { useToast } from '@/context/toast';
 import { addProduct, editProduct } from '@/service/products';
-import { IMainState, IProduct, IProductData } from '@/types/store.type';
+import { IProduct, IProductData } from '@/types/store.type';
 import { ProductSchema } from '@/validators/schemas';
 import { Backdrop, Grid, Modal, Stack } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -47,7 +47,6 @@ export default function ProductModal({
   const dispatch = useDispatch();
   const { openToast } = useToast();
   const { productId } = useParams();
-  const { info } = useSelector((state: IMainState) => state.user);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [priceInputValue, setPriceInputValue] = useState<string>('');
@@ -58,37 +57,45 @@ export default function ProductModal({
     handleClose();
   };
 
-  const onSubmit = async (values: IProductData) => {
-    try {
-      if (product && info?.token && productId) {
-        await editProduct(values, productId);
-      } else if (info?.token) {
-        await addProduct(values);
-      }
-      onClose();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      openToast({
-        message: `Erro ao salvar produto: ${error.response.data}`,
-        variant: 'error',
-      });
-    }
-
-    if (product) {
+  const saveToStore = (product: unknown) => {
+    if (productId) {
       dispatch(
         editAction({
-          product: values as unknown as IProduct,
+          product: product as unknown as IProduct,
         }),
       );
     } else {
       dispatch(
         addAction({
           product: {
-            ...values,
-            id: Math.random(),
+            product: product as unknown as IProduct,
           } as unknown as IProduct,
         }),
       );
+    }
+  };
+
+  const onSubmit = async (values: IProductData) => {
+    try {
+      const response = productId
+        ? await editProduct(values, productId)
+        : await addProduct(values);
+
+      if (response) {
+        saveToStore(response);
+        onClose();
+      } else {
+        throw new Error('Erro ao obter produto');
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(error);
+      }
+      openToast({
+        message: `Erro ao salvar produto: ${error.response.data}`,
+        variant: 'error',
+      });
     }
   };
 

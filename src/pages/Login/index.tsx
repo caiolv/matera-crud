@@ -5,6 +5,7 @@ import { getUser } from '@/service/user';
 import { setLogged } from '@/store/actions/user';
 import { ISignInForm } from '@/types/store.type';
 import { SignInSchema } from '@/validators/schemas';
+import { AxiosError } from 'axios';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -31,29 +32,28 @@ export default function Login() {
   const onSubmit = async (values: ISignInForm) => {
     try {
       const user = await getUser(values.email);
-
-      if (user) {
-        if (user.senha === values.password) {
-          dispatch(
-            setLogged({
-              user,
-              isLoggedIn: true,
-            }),
-          );
-          api.defaults.headers.common.Authorization = `Authorization ${user.token}`;
-        } else {
+      if (user?.senha === values.password) {
+        dispatch(
+          setLogged({
+            user,
+            isLoggedIn: true,
+          }),
+        );
+        api.defaults.headers.common.Authorization = user.token;
+      } else {
+        throw new Error('Usuárioaaa/senha incorreto(s)');
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error?.response?.status === 404) {
           openToast({
             message: 'Usuário/senha incorreto(s)',
             variant: 'error',
           });
+          return;
         }
-      } else {
-        openToast({
-          message: 'Usuário/senha incorreto(s)',
-          variant: 'error',
-        });
       }
-    } catch (error) {
+
       openToast({
         message: 'Erro ao realizar login',
         variant: 'error',
