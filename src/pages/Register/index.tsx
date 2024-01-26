@@ -4,13 +4,12 @@ import { useToast } from '@/context/toast';
 import { getAddress } from '@/service/cep';
 import { createUser } from '@/service/user';
 import { ISignUpForm } from '@/types/store.type';
-import { isCpfValid } from '@/validators/cpf';
 import { Gender, SignUpSchema } from '@/validators/schemas';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -44,23 +43,9 @@ export default function Register() {
   const { openToast } = useToast();
   const navigate = useNavigate();
 
-  const [cpfError, setCpfError] = useState<boolean>(false);
-
   const redirectToLogin = () => navigate('/login');
 
   const onSubmit = async (values: ISignUpForm) => {
-    const invalidCpf = !isCpfValid(values.cpf);
-
-    if (invalidCpf) {
-      setCpfError(true);
-      openToast({
-        message: 'CPF inválido',
-        variant: 'error',
-      });
-      return;
-    }
-    setCpfError(false);
-
     try {
       await createUser(values);
       redirectToLogin();
@@ -135,6 +120,7 @@ export default function Register() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.touched.nome && Boolean(formik.errors.nome)}
+              helperText={formik.touched.nome && formik.errors.nome}
             />
           </Item>
 
@@ -149,6 +135,7 @@ export default function Register() {
                 formik.touched.sobrenome && Boolean(formik.errors.sobrenome)
               }
               onBlur={formik.handleBlur}
+              helperText={formik.touched.sobrenome && formik.errors.sobrenome}
             />
           </Item>
 
@@ -161,6 +148,7 @@ export default function Register() {
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               onBlur={formik.handleBlur}
+              helperText={formik.touched.email && formik.errors.email}
             />
           </Item>
 
@@ -174,6 +162,7 @@ export default function Register() {
               onChange={formik.handleChange}
               error={formik.touched.senha && Boolean(formik.errors.senha)}
               onBlur={formik.handleBlur}
+              helperText={formik.touched.senha && formik.errors.senha}
             />
           </Item>
           <Item item xs={12} sm={4}>
@@ -186,7 +175,7 @@ export default function Register() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="cpf"
-              error={Boolean(formik.errors.cpf) || cpfError}
+              error={formik.touched.senha && Boolean(formik.errors.cpf)}
               InputProps={{
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 inputComponent: TextMaskCustom as any,
@@ -194,6 +183,7 @@ export default function Register() {
                   mask: '000.000.000-00',
                 },
               }}
+              helperText={formik.touched.cpf && formik.errors.cpf}
             />
           </Item>
 
