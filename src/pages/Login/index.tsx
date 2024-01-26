@@ -1,5 +1,6 @@
 import matera from '@/assets/matera.png';
 import { useToast } from '@/context/toast';
+import { api } from '@/service/api';
 import { getUser } from '@/service/user';
 import { setLogged } from '@/store/actions/user';
 import { ISignInForm } from '@/types/store.type';
@@ -38,7 +39,7 @@ export default function Login() {
             isLoggedIn: true,
           }),
         );
-        // api.defaults.headers.common.Authorization = user.token;
+        api.defaults.headers.common.Authorization = user.token;
       } else {
         throw new Error('Usuárioaaa/senha incorreto(s)');
       }
