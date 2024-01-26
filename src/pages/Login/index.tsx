@@ -23,6 +23,7 @@ import {
 export default function Login() {
   const dispatch = useDispatch();
   const { openToast } = useToast();
+  const [loading, setLoading] = React.useState(false);
 
   const initialValues: ISignInForm = {
     email: '',
@@ -31,6 +32,7 @@ export default function Login() {
 
   const onSubmit = async (values: ISignInForm) => {
     try {
+      setLoading(true);
       const user = await getUser(values.email);
       if (user?.senha === values.password) {
         dispatch(
@@ -58,6 +60,8 @@ export default function Login() {
         message: 'Erro ao realizar login',
         variant: 'error',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,7 +107,7 @@ export default function Login() {
           onClick={() => formik.handleSubmit()}
           disabled={!formik.isValid || !formik.dirty}
         >
-          Entrar
+          {loading ? 'Entrando...' : 'Entrar'}
         </Button>
 
         <SignInText>

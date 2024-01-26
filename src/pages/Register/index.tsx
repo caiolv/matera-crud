@@ -42,11 +42,13 @@ const initialValues: ISignUpForm = {
 export default function Register() {
   const { openToast } = useToast();
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
 
   const redirectToLogin = () => navigate('/login');
 
   const onSubmit = async (values: ISignUpForm) => {
     try {
+      setLoading(true);
       await createUser(values);
       redirectToLogin();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,6 +59,8 @@ export default function Register() {
         message: `Erro ao registrar usuário: ${error.response.data}`,
         variant: 'error',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -320,7 +324,7 @@ export default function Register() {
               onClick={() => formik.handleSubmit()}
               disabled={!formik.isValid || !formik.dirty}
             >
-              Cadastrar
+              {loading ? 'Cadastrando...' : 'Cadastrar'}
             </Button>
           </Item>
         </FormContainer>

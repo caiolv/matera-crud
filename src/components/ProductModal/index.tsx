@@ -46,10 +46,11 @@ export default function ProductModal({
 }: IProductModal) {
   const dispatch = useDispatch();
   const { openToast } = useToast();
-  const { productId } = useParams();
+  const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [priceInputValue, setPriceInputValue] = useState<string>('');
+  const [loading, setLoading] = React.useState(false);
 
   const onClose = () => {
     setSelectedImage(null);
@@ -58,7 +59,7 @@ export default function ProductModal({
   };
 
   const saveToStore = (product: unknown) => {
-    if (productId) {
+    if (id) {
       dispatch(
         editAction({
           product: product as unknown as IProduct,
@@ -77,8 +78,9 @@ export default function ProductModal({
 
   const onSubmit = async (values: IProductData) => {
     try {
-      const response = productId
-        ? await editProduct(values, productId)
+      setLoading(true);
+      const response = id
+        ? await editProduct(values, id)
         : await addProduct(values);
 
       if (response) {
@@ -96,6 +98,8 @@ export default function ProductModal({
         message: `Erro ao salvar produto: ${error.response.data}`,
         variant: 'error',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -133,6 +137,10 @@ export default function ProductModal({
       setPriceInputValue(formattedValue);
     }
   }, [product]);
+
+  const editButton = loading ? 'Salvando...' : 'Salvar';
+  const createButton = loading ? 'Criando...' : 'Criar';
+  const submitLabel = id ? editButton : createButton;
 
   const handlePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = event?.target.value;
@@ -248,7 +256,7 @@ export default function ProductModal({
                   onClick={() => formik.handleSubmit()}
                   disabled={!formik.isValid || !formik.dirty}
                 >
-                  Concluir
+                  {submitLabel}
                 </Button>
               </Grid>
             </FormContainer>
