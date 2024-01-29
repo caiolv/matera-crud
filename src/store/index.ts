@@ -16,7 +16,7 @@ import productReducer from './reducers/produts';
 import userReducer from './reducers/user';
 
 const productsPersistConfig = {
-  key: 'products',
+  key: 'root',
   storage,
 };
 

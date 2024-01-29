@@ -30,7 +30,6 @@ import {
 export default function Products() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { info } = useSelector((state: IMainState) => state.user);
   const { list } = useSelector((state: IMainState) => state.product);
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('');
@@ -44,14 +43,12 @@ export default function Products() {
   };
 
   const loadProducts = async () => {
-    if (list.length === 0 && info?.token) {
-      const products = await getProducts();
-      dispatch(
-        setProducts({
-          products,
-        }),
-      );
-    }
+    const products = await getProducts();
+    dispatch(
+      setProducts({
+        products,
+      }),
+    );
   };
 
   const filteredProducts = useMemo(() => {
