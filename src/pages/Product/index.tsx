@@ -83,22 +83,16 @@ export default function Product() {
           <div>
             <Typography variant="h6">{product?.marca}</Typography>
             <Typography variant="h6">
-              {product?.preco?.toLocaleString('pt-BR', {
+              {Number(product?.preco).toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
               })}
             </Typography>
             <Typography variant="body1">
-              Vendidos:{' '}
-              {product?.qt_vendas?.toLocaleString('pt-BR', {
-                currency: 'BRL',
-              })}
+              Vendidos: {product?.qt_vendas?.toLocaleString('pt-BR')}
             </Typography>
             <Typography variant="body1">
-              Em estoque:{' '}
-              {product?.qt_estoque?.toLocaleString('pt-BR', {
-                currency: 'BRL',
-              })}
+              Em estoque: {product?.qt_estoque?.toLocaleString('pt-BR')}
             </Typography>
           </div>
         </ProductBox>
