@@ -6,6 +6,7 @@ export const AppBar = styled(MAppBar)`
 
 export const Logo = styled('img')`
   height: 25px;
+  cursor: pointer;
 `;
 
 export const Container = styled(Box)`

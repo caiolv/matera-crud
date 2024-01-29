@@ -42,6 +42,10 @@ export default function Header(props: IProps) {
     navigate('/login');
   };
 
+  const redirectToHome = () => {
+    navigate('/');
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -62,7 +66,7 @@ export default function Header(props: IProps) {
         </IconButton>
 
         <Container>
-          <Logo src={matera} alt="" />
+          <Logo src={matera} alt="" onClick={redirectToHome} />
 
           <AvatarButton
             id="user-button"
